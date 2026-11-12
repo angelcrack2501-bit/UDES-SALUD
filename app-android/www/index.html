@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- skill:chrome -->
+<style>
+/* Credit line — bottom-right */
+.design-ui-credit {
+  position: fixed;
+  bottom: 12px;
+  right: 12px;
+  font: 11px/1 system-ui, sans-serif;
+  color: rgba(128,128,128,0.5);
+  pointer-events: none;
+  z-index: 2147483647;
+  transition: opacity 0.4s ease;
+  user-select: none;
+  letter-spacing: 0.02em;
+}
+
+/* Hide chrome on touch devices */
+@media (hover: none) {
+  .design-ui-credit { display: none; }
+}
+
+/* Print fixes */
+@media print {
+  * {
+    transition: none !important;
+    animation: none !important;
+    box-shadow: none !important;
+  }
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .design-ui-credit { display: none !important; }
+}
+
+</style>
+<script>
+(function () {
+    // Design-ui pages are single compositions, so the whole body is editable.
+    function markEditable() {
+        document.body.classList.add('artifact-editable');
+    }
+
+    // Credit badge with idle-fade. Hover devices only.
+    function initChromeUI() {
+        if (!matchMedia('(hover: hover)').matches) return;
+
+        var credit = document.createElement('div');
+        credit.className = 'design-ui-credit';
+        credit.setAttribute('aria-hidden', 'true');
+        credit.innerHTML = '\u{1F49C} by ClickUp Brain';
+        document.body.appendChild(credit);
+
+        var timer = null;
+        var fade = function (out) { credit.style.opacity = out ? '0' : ''; };
+        fade(true);
+        var show = function () {
+            fade(false);
+            clearTimeout(timer);
+            timer = setTimeout(function () { fade(true); }, 3000);
+        };
+        document.addEventListener('mousemove', show);
+        show();
+    }
+
+    function init() {
+        markEditable();
+        initChromeUI();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+
+</script>
+<!-- /skill:chrome -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#1a3a5c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="UDES Salud">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="UDES Salud">
+<link rel="manifest" id="manifestLink">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%231a5c3a'/%3E%3Ctext x='256' y='340' font-size='280' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'%3E%2B%3C/text%3E%3C/svg%3E">
+<title>UDES Salud</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --blue-900: oklch(25% 0.08 240);
+  --blue-800: oklch(30% 0.10 240);
+  --blue-700: oklch(35% 0.12 240);
+  --blue-600: oklch(42% 0.14 238);
+  --blue-500: oklch(50% 0.16 238);
+  --blue-400: oklch(60% 0.14 238);
+  --blue-300: oklch(70% 0.10 238);
+  --blue-200: oklch(80% 0.06 238);
+  --blue-100: oklch(90% 0.03 238);
+  --blue-50: oklch(96% 0.015 238);
+  --green-900: oklch(28% 0.08 155);
+  --green-800: oklch(35% 0.10 155);
+  --green-700: oklch(42% 0.12 155);
+  --green-600: oklch(50% 0.14 155);
+  --green-500: oklch(58% 0.16 155);
+  --green-400: oklch(68% 0.14 155);
+  --green-300: oklch(78% 0.10 155);
+  --green-200: oklch(86% 0.06 155);
+  --green-100: oklch(92% 0.03 155);
+  --green-50: oklch(97% 0.015 155);
+  --emergency: oklch(62% 0.25 30);
+  --emergency-hover: oklch(55% 0.25 30);
+  --emergency-glow: oklch(62% 0.25 30 / 0.3);
+  --warn-orange: oklch(70% 0.18 60);
+  --warn-bg: oklch(92% 0.05 60);
+  --surface-1: oklch(98% 0.005 238);
+  --surface-2: oklch(96% 0.008 238);
+  --surface-3: oklch(93% 0.01 238);
+  --text-primary: oklch(20% 0.02 238);
+  --text-secondary: oklch(40% 0.015 238);
+  --text-muted: oklch(55% 0.01 238);
+  --text-inverse: oklch(97% 0.005 238);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html, body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--surface-1);
+  color: var(--text-primary);
+  min-height: 100dvh;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  font-optical-sizing: auto;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (display-mode: standalone) {
+  .app-header { padding-top: calc(var(--safe-top) + 16px); }
+  .auth-view { padding-top: var(--safe-top); }
+}
+
+.view { display: none; min-height: 100dvh; }
+.view.active { display: flex; flex-direction: column; }
+
+.auth-view {
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(160deg, var(--blue-800) 0%, var(--green-800) 100%);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--surface-1);
+  border-radius: var(--radius-xl);
+  padding: 40px 32px;
+  box-shadow: 0 24px 48px oklch(20% 0.05 240 / 0.3);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.logo-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--blue-500), var(--green-500));
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-icon::after {
+  content: '+';
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-inverse);
+}
+
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--blue-700);
+  letter-spacing: -0.02em;
+}
+
+.auth-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.auth-subtitle {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.form-group { margin-bottom: 16px; }
+
+.form-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--surface-3);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s var(--ease-out);
+  background: var(--surface-2);
+  -webkit-appearance: none;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--blue-400);
+  background: var(--surface-1);
+}
+
+.form-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.form-error {
+  font-size: 0.8rem;
+  color: var(--emergency);
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: oklch(95% 0.03 30);
+  border-radius: var(--radius-sm);
+  display: none;
+  font-weight: 500;
+}
+
+.form-error.show { display: block; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s var(--ease-out);
+  text-decoration: none;
+  -webkit-appearance: none;
+}
+
+.btn-primary {
+  width: 100%;
+  background: linear-gradient(135deg, var(--blue-600), var(--blue-500));
+  color: var(--text-inverse);
+  padding: 14px 24px;
+  margin-top: 8px;
+}
+
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 16px oklch(40% 0.14 238 / 0.3); }
+.btn-primary:active { transform: translateY(0); }
+
+.auth-switch {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.auth-switch a {
+  color: var(--blue-500);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.app-view { background: var(--surface-1); }
+
+.app-header {
+  background: linear-gradient(135deg, var(--blue-700), var(--green-700));
+  padding: 20px 24px 24px;
+}
+
+.app-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.app-header .logo-sm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-header .logo-sm .logo-icon {
+  width: 32px;
+  height: 32px;
+  background: oklch(100% 0 0 / 0.15);
+  border-radius: 8px;
+}
+
+.app-header .logo-sm .logo-icon::after { font-size: 20px; }
+
+.app-header .logo-sm span {
+  font-weight: 700;
+  color: var(--text-inverse);
+  font-size: 1.1rem;
+}
+
+.btn-logout {
+  background: oklch(100% 0 0 / 0.12);
+  color: var(--text-inverse);
+  padding: 8px 14px;
+  font-size: 0.8rem;
+  border-radius: var(--radius-sm);
+}
+
+.btn-logout:hover { background: oklch(100% 0 0 / 0.2); }
+
+.app-greeting {
+  color: var(--text-inverse);
+  margin-top: 16px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.app-greeting strong { font-weight: 700; opacity: 1; }
+
+/* Emergency fixed at bottom */
+.emergency-btn-fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 24px calc(16px + var(--safe-bottom));
+  background: linear-gradient(to top, var(--surface-1) 80%, transparent);
+  z-index: 100;
+}
+
+.emergency-btn {
+  width: 100%;
+  padding: 16px 24px;
+  background: var(--emergency);
+  color: white;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 8px 24px var(--emergency-glow), 0 2px 8px oklch(20% 0.05 30 / 0.2);
+  transition: all 0.2s var(--ease-out);
+  animation: pulse-emergency 2s infinite;
+  -webkit-appearance: none;
+}
+
+@keyframes pulse-emergency {
+  0%, 100% { box-shadow: 0 8px 24px var(--emergency-glow), 0 2px 8px oklch(20% 0.05 30 / 0.2); }
+  50% { box-shadow: 0 8px 32px oklch(62% 0.25 30 / 0.5), 0 2px 8px oklch(20% 0.05 30 / 0.3); }
+}
+
+.emergency-btn:active { transform: translateY(0); }
+.emergency-btn svg { width: 22px; height: 22px; }
+
+.app-content {
+  padding: 24px;
+  padding-bottom: calc(100px + var(--safe-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.section {
+  background: var(--surface-1);
+  border: 1.5px solid var(--surface-3);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-title .icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.icon-allergy { background: oklch(90% 0.06 350); }
+.icon-procedure { background: var(--blue-100); }
+.icon-med { background: var(--green-100); }
+
+.btn-add {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--blue-100);
+  color: var(--blue-600);
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s var(--ease-out);
+}
+
+.btn-add:hover { background: var(--blue-200); transform: scale(1.1); }
+
+.item-list { display: flex; flex-direction: column; gap: 8px; }
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s var(--ease-out);
+}
+
+.item-info { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.item-name { font-weight: 600; font-size: 0.9rem; }
+.item-detail { font-size: 0.75rem; color: var(--text-muted); }
+
+.item-timer {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--green-600);
+  padding: 4px 8px;
+  background: var(--green-100);
+  border-radius: 20px;
+  white-space: nowrap;
+  margin-top: 4px;
+  display: inline-block;
+  width: fit-content;
+}
+
+.item-timer.urgent {
+  color: var(--emergency);
+  background: oklch(92% 0.05 30);
+  animation: blink-urgent 1s infinite;
+}
+
+@keyframes blink-urgent { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+
+.item.urgent-bg { background: var(--warn-bg); border: 1.5px solid var(--warn-orange); }
+
+.btn-remove {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  transition: all 0.15s var(--ease-out);
+}
+
+.btn-remove:hover { background: oklch(90% 0.06 30); color: var(--emergency); }
+
+.empty-state { text-align: center; padding: 16px; color: var(--text-muted); font-size: 0.85rem; }
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: oklch(20% 0.03 240 / 0.6);
+  z-index: 1000;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.modal-overlay.active { display: flex; animation: fadeIn 0.2s var(--ease-out); }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal {
+  background: var(--surface-1);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  padding: 32px 24px calc(32px + var(--safe-bottom));
+  width: 100%;
+  max-width: 420px;
+  max-height: 80dvh;
+  overflow-y: auto;
+  animation: slideUp 0.3s var(--ease-out);
+}
+
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+.modal-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; }
+.modal .form-group { margin-bottom: 14px; }
+.modal .btn-primary { margin-top: 12px; }
+
+.contacts-panel {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: oklch(20% 0.03 240 / 0.6);
+  z-index: 1000;
+  align-items: flex-end;
+}
+
+.contacts-panel.active { display: flex; animation: fadeIn 0.2s var(--ease-out); }
+
+.contacts-sheet {
+  background: var(--surface-1);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  padding: 32px 24px calc(32px + var(--safe-bottom));
+  width: 100%;
+  max-height: 85dvh;
+  overflow-y: auto;
+  animation: slideUp 0.3s var(--ease-out);
+}
+
+.contacts-sheet-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.contacts-sheet-title { font-size: 1.1rem; font-weight: 700; color: var(--emergency); }
+.contacts-sheet-hint { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px; }
+
+.contact-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  background: var(--surface-2);
+  border-radius: var(--radius-md);
+  margin-bottom: 10px;
+}
+
+.contact-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--blue-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--blue-600);
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.contact-info { flex: 1; min-width: 0; }
+.contact-name { font-weight: 600; font-size: 0.9rem; }
+.contact-phone { font-size: 0.8rem; color: var(--text-secondary); }
+.contact-actions { display: flex; gap: 6px; }
+
+.btn-call {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--green-500);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.15s var(--ease-out);
+}
+
+.btn-call:hover { background: var(--green-600); transform: scale(1.1); }
+
+.add-contact-form { margin-top: 16px; padding-top: 16px; border-top: 1.5px solid var(--surface-3); }
+
+.btn-taken {
+  padding: 4px 10px;
+  background: var(--green-100);
+  color: var(--green-700);
+  border: 1.5px solid var(--green-300);
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s var(--ease-out);
+  white-space: nowrap;
+}
+
+.btn-taken:hover { background: var(--green-200); }
+.btn-taken.done { background: var(--green-500); color: white; border-color: var(--green-500); }
+
+.install-banner {
+  display: none;
+  position: fixed;
+  bottom: 90px;
+  left: 24px;
+  right: 24px;
+  background: var(--blue-700);
+  color: var(--text-inverse);
+  padding: 16px 20px;
+  border-radius: var(--radius-lg);
+  z-index: 900;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 12px 32px oklch(20% 0.08 240 / 0.4);
+  animation: slideUp 0.4s var(--ease-out);
+}
+
+.install-banner.show { display: flex; }
+
+.install-banner-text { flex: 1; font-size: 0.85rem; font-weight: 500; }
+.install-banner-text strong { display: block; font-size: 0.95rem; margin-bottom: 2px; }
+
+.btn-install {
+  padding: 10px 18px;
+  background: white;
+  color: var(--blue-700);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.btn-dismiss { background: none; border: none; color: oklch(100% 0 0 / 0.6); font-size: 1.2rem; cursor: pointer; padding: 4px; }
+
+.offline-bar {
+  display: none;
+  background: var(--warn-orange);
+  color: white;
+  text-align: center;
+  padding: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.offline-bar.show { display: block; }
+
+@media (min-width: 640px) {
+  .auth-card { padding: 48px 40px; }
+  .modal { border-radius: var(--radius-xl); margin-bottom: 10%; max-width: 440px; padding-bottom: 32px; }
+  .modal-overlay { align-items: center; }
+  .contacts-sheet { border-radius: var(--radius-xl); margin: auto; max-width: 480px; max-height: 70dvh; padding-bottom: 32px; }
+  .contacts-panel { align-items: center; justify-content: center; }
+  .emergency-btn-fixed { max-width: 480px; left: 50%; right: auto; transform: translateX(-50%); }
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 4px; }
+
+.toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--text-primary);
+  color: var(--text-inverse);
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  font-weight: 500;
+  z-index: 2000;
+  opacity: 0;
+  transition: all 0.3s var(--ease-out);
+  pointer-events: none;
+}
+
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div id="offlineBar" class="offline-bar">Sin conexion: los datos se guardan localmente</div>
+
+<!-- LOGIN -->
+<div id="loginView" class="view auth-view active">
+  <div class="auth-card">
+    <div class="logo">
+      <div class="logo-icon"></div>
+      <span class="logo-text">UDES Salud</span>
+    </div>
+    <h2 class="auth-title">Bienvenido de vuelta</h2>
+    <p class="auth-subtitle">Ingresa tus credenciales para continuar</p>
+    <div class="form-group">
+      <label>Usuario</label>
+      <input type="text" id="loginUser" placeholder="Tu nombre de usuario">
+    </div>
+    <div class="form-group">
+      <label>Contrasena</label>
+      <input type="password" id="loginPass" placeholder="Tu contrasena">
+    </div>
+    <div id="loginError" class="form-error"></div>
+    <button type="button" class="btn btn-primary" onclick="handleLogin()">Iniciar Sesion</button>
+    <p class="auth-switch">No tienes cuenta? <a onclick="showView('registerView')">Registrate aqui</a></p>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div id="registerView" class="view auth-view">
+  <div class="auth-card">
+    <div class="logo">
+      <div class="logo-icon"></div>
+      <span class="logo-text">UDES Salud</span>
+    </div>
+    <h2 class="auth-title">Crear cuenta</h2>
+    <p class="auth-subtitle">Registra tus datos para comenzar</p>
+    <div class="form-group">
+      <label>Usuario</label>
+      <input type="text" id="regUser" placeholder="Elige un nombre de usuario">
+    </div>
+    <div class="form-group">
+      <label>Contrasena</label>
+      <input type="password" id="regPass" placeholder="Minimo 6 caracteres, 1 mayuscula">
+      <p class="form-hint">Minimo 6 caracteres y al menos una letra mayuscula</p>
+    </div>
+    <div class="form-group">
+      <label>Confirmar contrasena</label>
+      <input type="password" id="regPassConfirm" placeholder="Repite tu contrasena">
+    </div>
+    <div id="regError" class="form-error"></div>
+    <button type="button" class="btn btn-primary" onclick="handleRegister()">Crear Cuenta</button>
+    <p class="auth-switch">Ya tienes cuenta? <a onclick="showView('loginView')">Inicia sesion</a></p>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="appView" class="view">
+  <header class="app-header">
+    <div class="app-header-top">
+      <div class="logo-sm">
+        <div class="logo-icon"></div>
+        <span>UDES Salud</span>
+      </div>
+      <button class="btn btn-logout" onclick="logout()">Cerrar sesion</button>
+    </div>
+    <p class="app-greeting">Hola, <strong id="greetingName"></strong></p>
+  </header>
+
+  <div class="app-content">
+    <section class="section">
+      <div class="section-header">
+        <h3 class="section-title"><span class="icon icon-allergy">🫁</span> Alergias</h3>
+        <button class="btn-add" onclick="openModal('allergy')">+</button>
+      </div>
+      <div id="allergyList" class="item-list"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h3 class="section-title"><span class="icon icon-procedure">🏥</span> Procedimientos Cronicos</h3>
+        <button class="btn-add" onclick="openModal('procedure')">+</button>
+      </div>
+      <div id="procedureList" class="item-list"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h3 class="section-title"><span class="icon icon-med">💊</span> Medicamentos</h3>
+        <button class="btn-add" onclick="openModal('medication')">+</button>
+      </div>
+      <div id="medicationList" class="item-list"></div>
+    </section>
+  </div>
+
+  <!-- Emergency fixed at bottom -->
+  <div class="emergency-btn-fixed">
+    <button class="emergency-btn" onclick="openContacts()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      Contactos de Emergencia
+    </button>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="modalOverlay" class="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<!-- CONTACTS -->
+<div id="contactsPanel" class="contacts-panel" onclick="closeContactsOutside(event)">
+  <div class="contacts-sheet">
+    <div class="contacts-sheet-header">
+      <h3 class="contacts-sheet-title">📞 Contactos de Emergencia</h3>
+      <button class="btn-add" onclick="showAddContact()">+</button>
+    </div>
+    <p class="contacts-sheet-hint">Agrega minimo 3 contactos de confianza con nombre y telefono</p>
+    <div id="contactsList"></div>
+    <div id="addContactForm" class="add-contact-form" style="display:none;">
+      <div class="form-group">
+        <label>Nombre</label>
+        <input type="text" id="contactName" placeholder="Nombre del contacto">
+      </div>
+      <div class="form-group">
+        <label>Telefono</label>
+        <input type="tel" id="contactPhone" placeholder="Numero de telefono">
+      </div>
+      <button type="button" class="btn btn-primary" onclick="addContact()" style="margin-top:8px;">Guardar Contacto</button>
+    </div>
+  </div>
+</div>
+
+<!-- INSTALL BANNER -->
+<div id="installBanner" class="install-banner">
+  <div class="install-banner-text">
+    <strong>Instalar UDES Salud</strong>
+    Accede mas rapido desde tu pantalla de inicio
+  </div>
+  <button class="btn-install" onclick="installApp()">Instalar</button>
+  <button class="btn-dismiss" onclick="dismissInstall()">×</button>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+// ===== PWA =====
+(function setupPWA() {
+  var manifest = {
+    name: "UDES Salud",
+    short_name: "UDES Salud",
+    description: "App de salud para estudiantes UDES",
+    start_url: "./",
+    display: "standalone",
+    orientation: "portrait",
+    theme_color: "#1a3a5c",
+    background_color: "#f7f8fa",
+    icons: [{
+      src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%231a5c3a'/%3E%3Ctext x='256' y='340' font-size='280' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'%3E%2B%3C/text%3E%3C/svg%3E",
+      sizes: "512x512",
+      type: "image/svg+xml",
+      purpose: "any maskable"
+    }]
+  };
+  var blob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+  document.getElementById('manifestLink').setAttribute('href', URL.createObjectURL(blob));
+
+  if ('serviceWorker' in navigator) {
+    var swCode = "var CACHE='udes-v1';self.addEventListener('install',function(e){e.waitUntil(caches.open(CACHE).then(function(c){return c.addAll(['./'])}));self.skipWaiting()});self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(k){return Promise.all(k.filter(function(x){return x!==CACHE}).map(function(x){return caches.delete(x)}))}));self.clients.claim()});self.addEventListener('fetch',function(e){if(e.request.mode==='navigate'){e.respondWith(fetch(e.request).catch(function(){return caches.match('./')}))}else{e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request)}))}})";
+    var swBlob = new Blob([swCode], {type: 'application/javascript'});
+    navigator.serviceWorker.register(URL.createObjectURL(swBlob), {scope: './'}).catch(function(){});
+  }
+})();
+
+var deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault();
+  deferredPrompt = e;
+  setTimeout(function() {
+    if (!window.matchMedia('(display-mode: standalone)').matches) {
+      document.getElementById('installBanner').classList.add('show');
+    }
+  }, 3000);
+});
+
+function installApp() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function() { deferredPrompt = null; document.getElementById('installBanner').classList.remove('show'); });
+  } else {
+    showToast('Toca Compartir y luego Agregar a pantalla de inicio');
+    document.getElementById('installBanner').classList.remove('show');
+  }
+}
+
+function dismissInstall() { document.getElementById('installBanner').classList.remove('show'); }
+
+// ===== OFFLINE =====
+function updateOnline() {
+  var bar = document.getElementById('offlineBar');
+  if (!navigator.onLine) bar.classList.add('show'); else bar.classList.remove('show');
+}
+window.addEventListener('online', updateOnline);
+window.addEventListener('offline', updateOnline);
+updateOnline();
+
+// ===== STATE =====
+var currentUser = null;
+var timerInterval = null;
+
+function getUsers() { try { return JSON.parse(localStorage.getItem('udes_users') || '{}'); } catch(e) { return {}; } }
+function saveUsers(users) { localStorage.setItem('udes_users', JSON.stringify(users)); }
+
+function getUserData() {
+  var users = getUsers();
+  if (!users[currentUser]) { users[currentUser] = {allergies:[], procedures:[], medications:[], contacts:[]}; saveUsers(users); }
+  return users[currentUser];
+}
+
+function saveUserData(data) { var users = getUsers(); users[currentUser] = data; saveUsers(users); }
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2500);
+}
+
+function showError(id, msg) { var el = document.getElementById(id); el.textContent = msg; el.classList.add('show'); }
+function hideError(id) { var el = document.getElementById(id); el.classList.remove('show'); }
+
+// ===== VIEWS =====
+function showView(id) {
+  var views = document.querySelectorAll('.view');
+  for (var i = 0; i < views.length; i++) views[i].classList.remove('active');
+  document.getElementById(id).classList.add('active');
+  hideError('loginError');
+  hideError('regError');
+}
+
+// ===== AUTH =====
+function handleLogin() {
+  var user = document.getElementById('loginUser').value.trim();
+  var pass = document.getElementById('loginPass').value;
+  if (!user || !pass) { showError('loginError', 'Completa todos los campos'); return; }
+  var users = getUsers();
+  if (!users[user] || users[user].password !== pass) { showError('loginError', 'Usuario o contrasena incorrectos'); return; }
+  hideError('loginError');
+  currentUser = user;
+  localStorage.setItem('udes_session', user);
+  enterApp();
+}
+
+function handleRegister() {
+  var user = document.getElementById('regUser').value.trim();
+  var pass = document.getElementById('regPass').value;
+  var passConfirm = document.getElementById('regPassConfirm').value;
+  var users = getUsers();
+
+  if (!user || !pass || !passConfirm) { showError('regError', 'Completa todos los campos'); return; }
+  if (user.length < 3) { showError('regError', 'El usuario debe tener al menos 3 caracteres'); return; }
+  if (pass.length < 6) { showError('regError', 'La contrasena debe tener al menos 6 caracteres'); return; }
+  if (!/[A-Z]/.test(pass)) { showError('regError', 'La contrasena debe tener al menos una MAYUSCULA'); return; }
+  if (pass !== passConfirm) { showError('regError', 'Las contrasenas no coinciden'); return; }
+  if (users[user]) { showError('regError', 'Este usuario ya existe'); return; }
+
+  hideError('regError');
+  users[user] = {password: pass, allergies:[], procedures:[], medications:[], contacts:[]};
+  saveUsers(users);
+  showToast('Cuenta creada! Inicia sesion');
+  document.getElementById('regUser').value = '';
+  document.getElementById('regPass').value = '';
+  document.getElementById('regPassConfirm').value = '';
+  showView('loginView');
+}
+
+function logout() {
+  currentUser = null;
+  localStorage.removeItem('udes_session');
+  clearInterval(timerInterval);
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+  showView('loginView');
+}
+
+function enterApp() {
+  document.getElementById('greetingName').textContent = currentUser;
+  showView('appView');
+  renderAll();
+  startTimers();
+}
+
+// ===== RENDER =====
+function renderAll() { renderAllergies(); renderProcedures(); renderMedications(); renderContacts(); }
+
+function renderAllergies() {
+  var data = getUserData();
+  var el = document.getElementById('allergyList');
+  if (data.allergies.length === 0) { el.innerHTML = '<p class="empty-state">Sin alergias registradas</p>'; return; }
+  var html = '';
+  for (var i = 0; i < data.allergies.length; i++) {
+    var a = data.allergies[i];
+    html += '<div class="item"><div class="item-info"><span class="item-name">' + a.name + '</span>' +
+      (a.severity ? '<span class="item-detail">Severidad: ' + a.severity + '</span>' : '') +
+      '</div><button class="btn-remove" onclick="removeItem(\'allergies\',' + i + ')">×</button></div>';
+  }
+  el.innerHTML = html;
+}
+
+function renderProcedures() {
+  var data = getUserData();
+  var el = document.getElementById('procedureList');
+  if (data.procedures.length === 0) { el.innerHTML = '<p class="empty-state">Sin procedimientos registrados</p>'; return; }
+  var html = '';
+  for (var i = 0; i < data.procedures.length; i++) {
+    var p = data.procedures[i];
+    html += '<div class="item"><div class="item-info"><span class="item-name">' + p.name + '</span>' +
+      (p.frequency ? '<span class="item-detail">Frecuencia: ' + p.frequency + '</span>' : '') +
+      '</div><button class="btn-remove" onclick="removeItem(\'procedures\',' + i + ')">×</button></div>';
+  }
+  el.innerHTML = html;
+}
+
+function renderMedications() {
+  var data = getUserData();
+  var el = document.getElementById('medicationList');
+  if (data.medications.length === 0) { el.innerHTML = '<p class="empty-state">Sin medicamentos registrados</p>'; return; }
+  var html = '';
+  for (var i = 0; i < data.medications.length; i++) {
+    var m = data.medications[i];
+    var timeInfo = getMedTimeInfo(m);
+    var isUrgent = timeInfo.minutesLeft <= 30 && timeInfo.minutesLeft > 0;
+    var isDue = timeInfo.minutesLeft <= 0;
+    var takenClass = (m.lastTaken && timeInfo.minutesLeft > 0) ? 'done' : '';
+    var takenText = (m.lastTaken && timeInfo.minutesLeft > 0) ? '✓ Tomado' : 'Tomar';
+    html += '<div class="item ' + (isUrgent ? 'urgent-bg' : '') + '"><div class="item-info"><span class="item-name">' + m.name + '</span>' +
+      '<span class="item-detail">Cada ' + m.intervalHours + 'h · Dosis: ' + m.dose + '</span>';
+    if (!isDue && timeInfo.minutesLeft > 0) html += '<span class="item-timer ' + (isUrgent ? 'urgent' : '') + '">Proxima en ' + timeInfo.display + '</span>';
+    else if (isDue) html += '<span class="item-timer urgent">Es hora de tomar!</span>';
+    html += '</div><div style="display:flex;align-items:center;gap:6px;"><button class="btn-taken ' + takenClass + '" onclick="takeMed(' + i + ')">' + takenText + '</button>' +
+      '<button class="btn-remove" onclick="removeItem(\'medications\',' + i + ')">×</button></div></div>';
+  }
+  el.innerHTML = html;
+}
+
+function getMedTimeInfo(med) {
+  if (!med.lastTaken) return {minutesLeft: 0, display: 'Pendiente'};
+  var next = med.lastTaken + (med.intervalHours * 60 * 60 * 1000);
+  var diff = next - Date.now();
+  var minutesLeft = Math.ceil(diff / 60000);
+  if (minutesLeft <= 0) return {minutesLeft: 0, display: 'Ahora!'};
+  var h = Math.floor(minutesLeft / 60);
+  var m = minutesLeft % 60;
+  return {minutesLeft: minutesLeft, display: h > 0 ? h + 'h ' + m + 'min' : m + ' min'};
+}
+
+function takeMed(index) {
+  var data = getUserData();
+  data.medications[index].lastTaken = Date.now();
+  saveUserData(data);
+  renderMedications();
+  showToast('Medicamento registrado ✓');
+}
+
+function startTimers() { clearInterval(timerInterval); timerInterval = setInterval(function() { if (currentUser) renderMedications(); }, 30000); }
+
+function renderContacts() {
+  var data = getUserData();
+  var el = document.getElementById('contactsList');
+  if (data.contacts.length === 0) { el.innerHTML = '<p class="empty-state">Aun no has agregado contactos. Agrega al menos 3.</p>'; return; }
+  var html = '';
+  for (var i = 0; i < data.contacts.length; i++) {
+    var c = data.contacts[i];
+    html += '<div class="contact-card"><div class="contact-avatar">' + c.name.charAt(0).toUpperCase() + '</div>' +
+      '<div class="contact-info"><span class="contact-name">' + c.name + '</span><span class="contact-phone">' + c.phone + '</span></div>' +
+      '<div class="contact-actions"><a href="tel:' + c.phone + '" class="btn-call">📞</a>' +
+      '<button class="btn-remove" onclick="removeContact(' + i + ')">×</button></div></div>';
+  }
+  el.innerHTML = html;
+}
+
+// ===== ACTIONS =====
+function removeItem(type, index) { var data = getUserData(); data[type].splice(index, 1); saveUserData(data); renderAll(); showToast('Eliminado'); }
+function removeContact(index) { var data = getUserData(); data.contacts.splice(index, 1); saveUserData(data); renderContacts(); showToast('Contacto eliminado'); }
+
+// ===== MODALS =====
+function openModal(type) {
+  var overlay = document.getElementById('modalOverlay');
+  var content = document.getElementById('modalContent');
+  var html = '';
+  if (type === 'allergy') {
+    html = '<h3 class="modal-title">Agregar Alergia</h3><div class="form-group"><label>Nombre de la alergia</label><input type="text" id="modalInput1" placeholder="Ej: Penicilina, Polen..."></div><div class="form-group"><label>Severidad (opcional)</label><input type="text" id="modalInput2" placeholder="Leve, Moderada, Severa"></div><button type="button" class="btn btn-primary" onclick="saveAllergy()">Guardar</button>';
+  } else if (type === 'procedure') {
+    html = '<h3 class="modal-title">Agregar Procedimiento Cronico</h3><div class="form-group"><label>Nombre del procedimiento</label><input type="text" id="modalInput1" placeholder="Ej: Dialisis, Fisioterapia..."></div><div class="form-group"><label>Frecuencia (opcional)</label><input type="text" id="modalInput2" placeholder="Ej: 3 veces por semana"></div><button type="button" class="btn btn-primary" onclick="saveProcedure()">Guardar</button>';
+  } else if (type === 'medication') {
+    html = '<h3 class="modal-title">Agregar Medicamento</h3><div class="form-group"><label>Nombre del medicamento</label><input type="text" id="modalInput1" placeholder="Ej: Ibuprofeno, Metformina..."></div><div class="form-group"><label>Dosis</label><input type="text" id="modalInput2" placeholder="Ej: 500mg, 1 pastilla"></div><div class="form-group"><label>Cada cuantas horas</label><input type="number" id="modalInput3" placeholder="Ej: 8" min="1" max="72"></div><button type="button" class="btn btn-primary" onclick="saveMedication()">Guardar</button>';
+  }
+  content.innerHTML = html;
+  overlay.classList.add('active');
+}
+
+function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+function closeModalOutside(e) { if (e.target === e.currentTarget) closeModal(); }
+
+function saveAllergy() {
+  var name = document.getElementById('modalInput1').value.trim();
+  var severity = document.getElementById('modalInput2').value.trim();
+  if (!name) { showToast('Ingresa un nombre'); return; }
+  var data = getUserData(); data.allergies.push({name: name, severity: severity}); saveUserData(data);
+  closeModal(); renderAllergies(); showToast('Alergia agregada');
+}
+
+function saveProcedure() {
+  var name = document.getElementById('modalInput1').value.trim();
+  var frequency = document.getElementById('modalInput2').value.trim();
+  if (!name) { showToast('Ingresa un nombre'); return; }
+  var data = getUserData(); data.procedures.push({name: name, frequency: frequency}); saveUserData(data);
+  closeModal(); renderProcedures(); showToast('Procedimiento agregado');
+}
+
+function saveMedication() {
+  var name = document.getElementById('modalInput1').value.trim();
+  var dose = document.getElementById('modalInput2').value.trim();
+  var intervalHours = parseInt(document.getElementById('modalInput3').value);
+  if (!name || !dose || !intervalHours) { showToast('Completa todos los campos'); return; }
+  var data = getUserData(); data.medications.push({name: name, dose: dose, intervalHours: intervalHours, lastTaken: null}); saveUserData(data);
+  closeModal(); renderMedications(); showToast('Medicamento agregado');
+}
+
+// ===== CONTACTS =====
+function openContacts() { renderContacts(); document.getElementById('contactsPanel').classList.add('active'); }
+function closeContacts() { document.getElementById('contactsPanel').classList.remove('active'); document.getElementById('addContactForm').style.display = 'none'; }
+function closeContactsOutside(e) { if (e.target === e.currentTarget) closeContacts(); }
+function showAddContact() { document.getElementById('addContactForm').style.display = 'block'; }
+
+function addContact() {
+  var name = document.getElementById('contactName').value.trim();
+  var phone = document.getElementById('contactPhone').value.trim();
+  if (!name || !phone) { showToast('Completa nombre y telefono'); return; }
+  var data = getUserData(); data.contacts.push({name: name, phone: phone}); saveUserData(data);
+  document.getElementById('contactName').value = ''; document.getElementById('contactPhone').value = '';
+  document.getElementById('addContactForm').style.display = 'none';
+  renderContacts(); showToast('Contacto agregado');
+}
+
+// ===== ENTER KEY =====
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    if (document.getElementById('loginView').classList.contains('active')) handleLogin();
+    else if (document.getElementById('registerView').classList.contains('active')) handleRegister();
+  }
+});
+
+// ===== INIT =====
+(function init() {
+  var session = localStorage.getItem('udes_session');
+  if (session) { var users = getUsers(); if (users[session]) { currentUser = session; enterApp(); } }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">UDES Salud</string>
+    <string name="title_activity_main">UDES Salud</string>
+    <string name="package_name">co.udes.salud</string>
+    <string name="custom_url_scheme">co.udes.salud</string>
+</resources>

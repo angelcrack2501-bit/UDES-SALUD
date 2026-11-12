@@ -1,0 +1,32 @@
+name: Construir APK Android
+on:
+  push:
+    branches: [main]
+    paths: ["index.html", "app-android/**", ".github/workflows/apk.yml"]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app-android
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 17 }
+      - run: npm ci
+      - run: cp ../index.html www/ && npx cap sync android
+      - run: chmod +x android/gradlew && cd android && ./gradlew assembleDebug --no-daemon
+      - run: cp android/app/build/outputs/apk/debug/app-debug.apk UDES-Salud.apk
+      - uses: actions/upload-artifact@v4
+        with: { name: UDES-Salud-APK, path: app-android/UDES-Salud.apk }
+      - name: Publicar en Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: apk-${{ github.run_number }}
+          name: UDES Salud APK ${{ github.run_number }}
+          files: app-android/UDES-Salud.apk
